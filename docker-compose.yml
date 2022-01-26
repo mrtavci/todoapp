@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  couchbase:
+    build: ./couchbase
+    image: muratavci/couchbase
+    ports:
+      - "8091-8093:8091-8093"
+      - "11210:11210"
+
+  todo-app:
+    build: ./todoapp
+    image: muratavci/todoapp:latest
+    depends_on:
+      - "couchbase"
+    restart: always
