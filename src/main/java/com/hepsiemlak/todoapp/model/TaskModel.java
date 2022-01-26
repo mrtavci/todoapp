@@ -2,7 +2,6 @@
 package com.hepsiemlak.todoapp.model;
 
 
-import com.couchbase.client.deps.com.fasterxml.jackson.annotation.JsonFormat;
 import com.couchbase.client.java.repository.annotation.Field;
 import io.swagger.annotations.ApiModel;
 import org.springframework.data.annotation.Id;
