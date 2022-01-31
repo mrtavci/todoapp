@@ -30,13 +30,13 @@ public class User {
 
     @PutMapping("/{id}")
     @ApiOperation(value = "Update Operation", response = UserModel.class)
-    public UserModel update(@PathVariable String id, @RequestBody UserModel updateUser) {
+    public UserModel update(@PathVariable Integer id, @RequestBody UserModel updateUser) {
         return serviceImpl.update(id, updateUser);
     }
 
     @ApiOperation(value = "Delete By Id Operation")
     @DeleteMapping("/user/{id}")
-    public void deleteById(@PathVariable String id) {
+    public void deleteById(@PathVariable Integer id) {
         serviceImpl.deleteById(id);
     }
 
@@ -48,7 +48,7 @@ public class User {
 
     @ApiOperation(value = "Get By Id Operation", response = UserModel.class)
     @GetMapping("/{id}")
-    public Optional<UserModel> findById(@PathVariable String id) {
+    public Optional<UserModel> findById(@PathVariable Integer id) {
         return serviceImpl.findById(id);
     }
 }

@@ -30,13 +30,13 @@ public class Task {
 
     @PutMapping("/{id}")
     @ApiOperation(value = "Update Operation", response = TaskModel.class)
-    public TaskModel update(@PathVariable String id, @RequestBody TaskModel updateTask) {
+    public TaskModel update(@PathVariable Integer id, @RequestBody TaskModel updateTask) {
         return serviceImpl.update(id, updateTask);
     }
 
     @ApiOperation(value = "Delete By Id Operation")
     @DeleteMapping("/task/{id}")
-    public void deleteById(@PathVariable String id) {
+    public void deleteById(@PathVariable Integer id) {
         serviceImpl.deleteById(id);
     }
 
@@ -48,7 +48,7 @@ public class Task {
 
     @ApiOperation(value = "Get By Id Operation", response = TaskModel.class)
     @GetMapping("/{id}")
-    public Optional<TaskModel> findById(@PathVariable String id) {
+    public Optional<TaskModel> findById(@PathVariable Integer id) {
         return serviceImpl.findById(id);
     }
 }

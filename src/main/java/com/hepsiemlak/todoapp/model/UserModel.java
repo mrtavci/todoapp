@@ -2,36 +2,25 @@
 package com.hepsiemlak.todoapp.model;
 
 
-import com.couchbase.client.java.repository.annotation.Field;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
-import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
-import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @Document
 @ApiModel(value = "User Document Object")
 public class UserModel {
+
     @Id
-    @GeneratedValue(strategy = GenerationStrategy.UNIQUE)
     private Integer id;
 
-    @NotNull
-    @Field
     private String name;
-
-    @Field
     private String surname;
-
-    @Field
     private String mail;
 
-    @Field
     @JsonIgnore
     private List<TaskModel> taskList = new ArrayList<>();
 

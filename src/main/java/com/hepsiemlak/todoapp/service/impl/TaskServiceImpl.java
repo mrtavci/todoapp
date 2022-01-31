@@ -22,7 +22,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskModel update(String id, TaskModel model) {
+    public TaskModel update(Integer id, TaskModel model) {
         TaskModel taskData = repository.findById(id).orElseThrow(IllegalArgumentException::new);
         if (taskData == null) {
             throw new IllegalArgumentException("Task Does Not Exist Id:" + id);
@@ -31,7 +31,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Optional<TaskModel> findById(String id) {
+    public Optional<TaskModel> findById(Integer id) {
         if (repository.existsById(id)) {
             return repository.findById(id);
         } else {
@@ -40,7 +40,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deleteById(Integer id) {
         repository.deleteById(id);
     }
 

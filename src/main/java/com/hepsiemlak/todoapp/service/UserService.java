@@ -8,11 +8,11 @@ import java.util.Optional;
 public interface UserService {
     UserModel save(UserModel model);
 
-    UserModel update(String id,UserModel model);
+    UserModel update(Integer id,UserModel model);
 
-    Optional<UserModel> findById(String id);
+    Optional<UserModel> findById(Integer id);
 
-    void deleteById(String id);
+    void deleteById(Integer id);
 
     List<UserModel> findAll();
 }

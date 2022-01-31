@@ -1,74 +1,82 @@
 package com.hepsiemlak.todoapp.config;
 
-import com.couchbase.client.java.Bucket;
+
 import com.hepsiemlak.todoapp.model.UserModel;
-import jdk.nashorn.internal.runtime.options.LoggingOption;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.couchbase.config.AbstractReactiveCouchbaseConfiguration;
-import org.springframework.data.couchbase.core.RxJavaCouchbaseTemplate;
-import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
-import org.springframework.data.couchbase.repository.config.ReactiveRepositoryOperationsMapping;
+import org.springframework.data.couchbase.CouchbaseClientFactory;
+import org.springframework.data.couchbase.SimpleCouchbaseClientFactory;
+import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
+import org.springframework.data.couchbase.core.CouchbaseTemplate;
+import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversions;
+import org.springframework.data.couchbase.repository.config.RepositoryOperationsMapping;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.logging.Logger;
 
 @Configuration
-@EnableCouchbaseRepositories
-public class Couchbase extends AbstractReactiveCouchbaseConfiguration {
+public class Couchbase extends AbstractCouchbaseConfiguration {
 
-    @Value("${couchbase.cluster.bucket}")
-    private String bucketName;
+    @Autowired
+    private ApplicationContext context;
 
-    @Value("${couchbase.cluster.username}")
-    private String username;
+    @Value("${app.couchbase.connection-string}")
+    private String connectionString;
 
-    @Value("${couchbase.cluster.password}")
+    @Value("${app.couchbase.user-name}")
+    private String userName;
+
+    @Value("${app.couchbase.password}")
     private String password;
 
-    @Value("${couchbase.cluster.ip}")
-    private String ip;
+    @Value("${app.couchbase.bucket-primary}")
+    private String customerBucket;
 
-
-    @Override
-    protected List<String> getBootstrapHosts() {
-        return Collections.singletonList(this.ip);
-    }
+    @Value("${app.couchbase.bucket-user}")
+    private String userBucket;
 
     @Override
-    protected String getBucketName() {
-        return this.bucketName;
+    public String getConnectionString() {
+        return connectionString;
     }
 
     @Override
-    protected String getBucketPassword() {
-        return this.password;
+    public String getUserName() {
+        return userName;
     }
 
     @Override
-    protected String getUsername() {
-        return this.username;
+    public String getPassword() {
+        return password;
     }
 
-    private Bucket userAuthBucket() throws Exception {
-        return couchbaseCluster().openBucket("user");
+    @Override
+    public String getBucketName() {
+        return customerBucket;
     }
 
-    private RxJavaCouchbaseTemplate userAuthTemplate() throws Exception {
-        RxJavaCouchbaseTemplate template = new RxJavaCouchbaseTemplate(
-                couchbaseClusterInfo(), userAuthBucket(),
-                mappingCouchbaseConverter(), translationService());
-        template.setDefaultConsistency(getDefaultConsistency());
+
+    @Override
+    public void configureRepositoryOperationsMapping(RepositoryOperationsMapping mapping) {
+        try {
+            mapping.mapEntity(UserModel.class, getCouchbaseTemplate(userBucket));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private CouchbaseTemplate getCouchbaseTemplate(String bucketName) throws Exception {
+        CouchbaseTemplate template = new CouchbaseTemplate(couchbaseClientFactory(bucketName),
+                mappingCouchbaseConverter(couchbaseMappingContext(customConversions()),
+                        new CouchbaseCustomConversions(Collections.emptyList())));
+
+        template.setApplicationContext(context);
         return template;
     }
 
-    @Override
-    public void configureReactiveRepositoryOperationsMapping(ReactiveRepositoryOperationsMapping baseMapping) {
-        try {
-            baseMapping.mapEntity(UserModel.class, userAuthTemplate());
-        } catch (Exception ex) {
-            Logger.getAnonymousLogger().info("Error in creating mapping for {} bucket" + this.username + ex);
-        }
+    private CouchbaseClientFactory couchbaseClientFactory(String bucketName) {
+        return new SimpleCouchbaseClientFactory(couchbaseCluster(couchbaseClusterEnvironment()),
+                bucketName, this.getScopeName());
     }
 }

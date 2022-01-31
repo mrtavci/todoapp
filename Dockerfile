@@ -1,4 +1,3 @@
-FROM openjdk:8
-EXPOSE 8080
-ADD /target/*.jar app.jar
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom --spring.config.location=classpath:file:/app/application-propertiesdoc","-jar","/app.jar"]
+FROM openjdk:8-jdk-alpine
+COPY target/todoapp-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]

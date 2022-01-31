@@ -5,11 +5,10 @@ import com.hepsiemlak.todoapp.model.UserModel;
 import org.springframework.data.couchbase.core.query.Query;
 import org.springframework.data.couchbase.core.query.ViewIndexed;
 import org.springframework.data.couchbase.repository.CouchbaseRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@ViewIndexed(designDoc="user")
-public interface UserRepository extends CouchbaseRepository<UserModel, String> {
-    @Query("#{#n1ql.selectEntity}")
-    List<UserModel> findAll();
+@Repository
+public interface UserRepository extends CouchbaseRepository<UserModel, Integer> {
 }

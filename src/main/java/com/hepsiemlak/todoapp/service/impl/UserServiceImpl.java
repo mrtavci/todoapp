@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel update(String id, UserModel model) {
+    public UserModel update(Integer id, UserModel model) {
         UserModel taskData = repository.findById(id).orElseThrow(IllegalArgumentException::new);
         if (taskData == null) {
             throw new IllegalArgumentException("User Does Not Exist Id:" + id);
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserModel> findById(String id) {
+    public Optional<UserModel> findById(Integer id) {
         if (repository.existsById(id)) {
             return repository.findById(id);
         } else {
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deleteById(Integer id) {
         repository.deleteById(id);
     }
 

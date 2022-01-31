@@ -8,11 +8,11 @@ import java.util.Optional;
 public interface TaskService {
     TaskModel save(TaskModel model);
 
-    TaskModel update(String id,TaskModel model);
+    TaskModel update(Integer id,TaskModel model);
 
-    Optional<TaskModel> findById(String id);
+    Optional<TaskModel> findById(Integer id);
 
-    void deleteById(String id);
+    void deleteById(Integer id);
 
     List<TaskModel> findAll();
 }
